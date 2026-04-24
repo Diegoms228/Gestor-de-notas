@@ -1,0 +1,22 @@
+services:
+  api:
+    build: ./backend
+    container_name: gestor-notas-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/db:/app/db
+    environment:
+      - SECRET_KEY=cambia_esta_clave_secreta_en_produccion
+    restart: unless-stopped
+
+  web:
+    image: nginx:alpine
+    container_name: gestor-notas-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - api
+    restart: unless-stopped
